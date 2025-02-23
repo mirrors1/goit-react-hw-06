@@ -6,10 +6,14 @@
 }
 
 .name,
-.phone {
+.phone,
+.group {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.7);
+}
+.group {
+  text-transform: uppercase;
 }
 .contact {
   flex-direction: column;

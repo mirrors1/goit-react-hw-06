@@ -1,13 +1,22 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import s from './ContactForm.module.css';
 import * as Yup from 'yup';
+import { nanoid } from 'nanoid';
+//Імпортуємо хук
+import { useDispatch } from 'react-redux';
+//Імпортуємо фабрику екшену
+import { addContact } from '../../redux/contactsSlice';
 
-const ContactForm = ({ newContact }) => {
+const AddContactForm = () => {
+  //Отримуємо посилання на функцію відправки екшенів
+  const dispatch = useDispatch();
+
   const initialValues = {
     name: '',
     number: '',
+    group: 'other',
   };
-  const phoneRegex = /^(\d{3}-\d{2}-\d{2}|\d{7})$/;
+  const phoneRegex = /^(\d{3}-\d{3}-\d{4}|\d{10})$/;
   const nameRegex = /^[A-Za-zА-Яа-яЄєІіЇїҐґ-\s]+$/;
 
   const ContactSchema = Yup.object().shape({
@@ -18,23 +27,24 @@ const ContactForm = ({ newContact }) => {
       .matches(nameRegex, 'Enter only letters'),
     number: Yup.string()
       .required('This field is required')
-      .min(7, 'The number must contain at least 7 characters')
-      // .max(9, 'The number must contain up to 9 characters')
-      .matches(phoneRegex, 'Phone number format ХХХ-ХХ-ХХ'),
+      .min(10, 'The number must contain at least 10 characters')
+      .matches(phoneRegex, 'Phone number format ХХХ-ХХХ-ХХХХ'),
+    group: Yup.string().oneOf(['family', 'work', 'other']).required('Required'),
   });
 
   const handleNumberChange = (e, setFieldValue) => {
     let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 3 && value.length <= 5) {
+    if (value.length > 3 && value.length <= 6) {
       value = `${value.slice(0, 3)}-${value.slice(3)}`;
-    } else if (value.length > 5) {
-      value = `${value.slice(0, 3)}-${value.slice(3, 5)}-${value.slice(5, 7)}`;
+    } else if (value.length > 6) {
+      value = `${value.slice(0, 3)}-${value.slice(3, 6)}-${value.slice(6, 10)}`;
     }
     setFieldValue('number', value);
   };
 
   const handleSubmit = (values, action) => {
-    newContact(values);
+    values.id = nanoid();
+    dispatch(addContact(values));
     action.resetForm();
   };
 
@@ -68,6 +78,14 @@ const ContactForm = ({ newContact }) => {
               </Field>
               <ErrorMessage name="number" component="span" />
             </label>
+            <label className={s.label}>
+              Group
+              <Field as="select" name="group" className={s.field}>
+                <option value="family">Family</option>
+                <option value="work">Work</option>
+                <option value="other">Other</option>
+              </Field>
+            </label>
             <button className={s.btn} type="submit">
               Add contact
             </button>
@@ -77,4 +95,4 @@ const ContactForm = ({ newContact }) => {
     </section>
   );
 };
-export default ContactForm;
+export default AddContactForm;

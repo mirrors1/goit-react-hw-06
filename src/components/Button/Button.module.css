@@ -1,0 +1,50 @@
+.btn {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 4px;
+  /* border: none; */
+  font: inherit;
+  background-color: transparent;
+  border: 1px solid #337ab7;
+  /* border-radius: 0.6em; */
+  color: #337ab7;
+  align-items: center;
+  text-decoration: none;
+
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+
+  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+  &:hover,
+  &:focus,
+  &.isSelected,
+  &:active {
+    color: #fff;
+    outline: 0;
+    box-shadow: 0 0 40px 40px #337ab7 inset;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .btn {
+    padding: 8px 2px;
+  }
+}
+@media screen and (min-width: 376px) {
+  .btn {
+    padding: 8px 4px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .btn {
+    padding: 8px 6px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .btn {
+    padding: 8px 12px;
+  }
+}
